@@ -154,7 +154,7 @@ export default function Footer() {
         <p className="flex items-center gap-2">
           <span>Crafted for high-impact visual storytelling</span>
           <span className="w-1 h-1 rounded-full bg-blue" />
-          <span>Kallidaikurichi, India</span>
+          <span>Kallidaikurichi</span>
         </p>
       </div>
     </footer>
