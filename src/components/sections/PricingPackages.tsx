@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { siteConfig } from '../../config/siteConfig'
 import { packages } from '../../data/packages'
 import Reveal from '../common/Reveal'
@@ -44,22 +43,11 @@ export default function PricingPackages() {
                     {pkg.tagline}
                   </p>
 
-                  <div className="mb-6 pb-6 border-b border-line">
-                    <span className="font-display font-bold text-3xl sm:text-4xl text-white">
-                      {pkg.price}
-                    </span>
-                    {pkg.period && (
-                      <span className="text-xs text-fog ml-1 font-mono block mt-1">
-                        / {pkg.period}
-                      </span>
-                    )}
-                  </div>
-
                   <p className="text-[0.7rem] font-mono tracking-wider uppercase text-silver mb-3">
                     WHAT'S INCLUDED:
                   </p>
 
-                  <ul className="space-y-2.5 mb-8">
+                  <ul className="space-y-2.5 mb-6">
                     {pkg.deliverables.map((item) => (
                       <li key={item} className="flex items-start gap-2.5 text-xs text-fog leading-snug">
                         <svg
@@ -79,27 +67,14 @@ export default function PricingPackages() {
                   </ul>
                 </div>
 
-                <div className="space-y-2.5">
-                  <Link
-                    to={`/contact?package=${encodeURIComponent(pkg.name)}`}
-                    className={`w-full py-3 rounded text-center text-xs font-semibold uppercase tracking-wider block transition-all ${
-                      pkg.isPopular
-                        ? 'bg-blue text-white shadow-glowSm hover:bg-blue-accent'
-                        : 'bg-panel border border-line text-white hover:border-blue hover:text-blue-glow'
-                    }`}
-                  >
-                    Select Package
-                  </Link>
-
-                  <a
-                    href={`https://wa.me/${siteConfig.whatsappClean}?text=Hi%20Jebaraj,%20I'd%20like%20to%20know%20more%20about%20the%20${encodeURIComponent(pkg.name)}%20package.`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full py-2 text-center text-[0.7rem] font-mono uppercase text-fog hover:text-silver block transition-colors"
-                  >
-                    Inquire on WhatsApp →
-                  </a>
-                </div>
+                <a
+                  href={`https://wa.me/${siteConfig.whatsappClean}?text=Hi%20Jebaraj,%20I'd%20like%20to%20know%20more%20about%20the%20${encodeURIComponent(pkg.name)}%20package.`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-2.5 text-center text-[0.7rem] font-mono uppercase text-fog hover:text-silver block transition-colors border-t border-line pt-4"
+                >
+                  Inquire on WhatsApp →
+                </a>
               </div>
             </Reveal>
           ))}
@@ -108,4 +83,3 @@ export default function PricingPackages() {
     </section>
   )
 }
-

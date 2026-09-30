@@ -34,21 +34,13 @@ export default function Navbar() {
           className="flex items-center gap-3 group focus-visible:outline-none"
           aria-label="Jebaraj Alex Robin Photography home"
         >
-          <div className="relative w-10 h-10 rounded bg-panel2 border border-line flex items-center justify-center group-hover:border-blue group-hover:shadow-glowSm transition-all">
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              className="text-blue group-hover:text-blue-glow transition-colors"
-            >
-              <rect x="2" y="6" width="20" height="14" rx="2" strokeWidth="1.6" />
-              <circle cx="12" cy="13" r="4" strokeWidth="1.6" />
-              <circle cx="12" cy="13" r="1.5" fill="#38BDF8" />
-              <path d="M8 6L9.5 3.5H14.5L16 6" strokeWidth="1.6" strokeLinejoin="round" />
-            </svg>
-            <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-blue animate-pulse" />
+          <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-panel2 border border-line flex items-center justify-center group-hover:border-blue group-hover:shadow-glowSm transition-all">
+            <img
+              src="/logo.png"
+              alt="Jebaraj Studio Logo"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-blue animate-pulse z-10 border border-ink" />
           </div>
 
           <div className="leading-tight">

@@ -6,8 +6,6 @@ export const packages: PackageItem[] = [
     name: 'Portrait & Pre-Wedding',
     category: 'Portraits',
     tagline: 'Ideal for intimate couple sessions, creative personal branding, or maternity.',
-    price: '₹28,000',
-    period: 'Single Session',
     isPopular: false,
     deliverables: [
       'Up to 3 hours of outdoor or studio coverage',
@@ -23,8 +21,6 @@ export const packages: PackageItem[] = [
     name: 'The Signature Wedding',
     category: 'Weddings',
     tagline: 'Comprehensive, story-driven documentary coverage for modern couples.',
-    price: '₹1,25,000',
-    period: '2 Days / Multi-Event',
     isPopular: true,
     deliverables: [
       'Lead photographer (Jebaraj Alex Robin) + 1 associate photographer',
@@ -41,8 +37,6 @@ export const packages: PackageItem[] = [
     name: 'Sports & Live Action',
     category: 'Sports',
     tagline: 'High-speed capture for tournaments, athletics, marathon, and club matches.',
-    price: '₹45,000',
-    period: 'Per Match / Day',
     isPopular: false,
     deliverables: [
       'Up to 6 hours continuous field-side action coverage',
@@ -58,8 +52,6 @@ export const packages: PackageItem[] = [
     name: 'Commercial & Brand',
     category: 'Commercial',
     tagline: 'Editorial-grade visuals designed to elevate brand authority and digital campaigns.',
-    price: '₹75,000',
-    period: 'Full Day Shoot',
     isPopular: false,
     deliverables: [
       'Pre-production moodboarding & lighting layout consultation',
@@ -71,4 +63,3 @@ export const packages: PackageItem[] = [
     ],
   },
 ]
-

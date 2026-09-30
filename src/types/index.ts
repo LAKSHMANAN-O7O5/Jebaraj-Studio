@@ -74,8 +74,6 @@ export interface PackageItem {
   name: string
   category: PhotographyCategory | 'All'
   tagline: string
-  price: string
-  period?: string
   isPopular?: boolean
   deliverables: string[]
 }

@@ -12,12 +12,12 @@ export default function Footer() {
         {/* Brand Column */}
         <div className="lg:col-span-2">
           <Link to="/" className="inline-flex items-center gap-3 mb-5 group">
-            <div className="w-9 h-9 rounded bg-panel2 border border-line flex items-center justify-center text-blue group-hover:border-blue transition-colors">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <rect x="2" y="6" width="20" height="14" rx="2" strokeWidth="1.6" />
-                <circle cx="12" cy="13" r="4" strokeWidth="1.6" />
-                <path d="M8 6L9.5 3.5H14.5L16 6" strokeWidth="1.6" />
-              </svg>
+            <div className="w-10 h-10 rounded-lg overflow-hidden bg-panel2 border border-line flex items-center justify-center group-hover:border-blue transition-colors">
+              <img
+                src="/logo.png"
+                alt="Jebaraj Studio Logo"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
               <span className="block font-display font-bold text-lg tracking-tight text-white">
