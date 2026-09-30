@@ -1,23 +1,52 @@
+import React, { useState, Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import { siteConfig } from '../../config/siteConfig'
+import { projects } from '../../data/projects'
 import Reveal from '../common/Reveal'
 
+// Lazy load Three.js FloatingPhotoBackground to keep bundle lean
+const FloatingPhotoBackground = React.lazy(
+  () => import('../effects/FloatingPhotoBackground')
+)
+
+// Select first 7 project covers
+const heroProjects = projects.slice(0, 7)
+const heroImages = heroProjects.map((p) => p.coverImage)
+
 export default function HeroSection() {
+  const [activeIndex, setActiveIndex] = useState<number>(0)
+  const activeProject = heroProjects[activeIndex] || heroProjects[0]
+
   return (
     <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden pt-20 pb-16">
-      {/* Background Hero Photography with cinematic color wash */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1519741497674-611481863552?q=85&w=1920&auto=format&fit=crop"
-          alt="Jebaraj Alex Robin Photography — Candid wedding moment captured in Kallidaikurichi"
-          className="w-full h-full object-cover object-center scale-105 animate-[pulse_10s_ease-in-out_infinite]"
-          loading="eager"
+      {/* 3D Floating Photo Background Layer */}
+      <Suspense
+        fallback={
+          <div className="absolute inset-0 z-0">
+            <img
+              src="https://images.unsplash.com/photo-1519741497674-611481863552?q=85&w=1920&auto=format&fit=crop"
+              alt="Jebaraj Alex Robin Photography — Candid wedding moment captured in Kallidaikurichi"
+              className="w-full h-full object-cover object-center scale-105 opacity-30"
+              loading="eager"
+            />
+          </div>
+        }
+      >
+        <FloatingPhotoBackground
+          images={heroImages}
+          onActiveChange={setActiveIndex}
+          className="absolute inset-0 z-0"
         />
-        {/* Multi-layer gradient overlays for rich deep black and blue tone */}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/75 to-ink/40" />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/50 to-transparent" />
-        <div className="absolute inset-0 bg-radial-glow pointer-events-none" />
-      </div>
+      </Suspense>
+
+      {/* Desktop Left-Only Gradient Overlay (covers left ~55% of hero) */}
+      <div className="hidden md:block absolute left-0 top-0 bottom-0 w-[55%] z-[1] pointer-events-none bg-gradient-to-r from-[#050608] via-[#050608]/70 to-transparent" />
+
+      {/* Mobile Full Dim Overlay (0.6 opacity) */}
+      <div className="md:hidden absolute inset-0 z-[1] pointer-events-none bg-[#050608]/60" />
+
+      {/* Light Bottom Fade Overlay */}
+      <div className="absolute inset-x-0 bottom-0 h-32 z-[1] pointer-events-none bg-gradient-to-t from-[#050608]/60 to-transparent" />
 
       {/* Viewfinder crosshairs overlay */}
       <div className="absolute inset-8 md:inset-16 pointer-events-none z-10 border border-white/5">
@@ -32,18 +61,28 @@ export default function HeroSection() {
         </div>
       </div>
 
-      <div className="container-x relative z-10 w-full flex flex-col justify-center py-16 md:py-24">
+      <div className="container-x relative z-10 w-full flex flex-col justify-center py-16 md:py-24 pointer-events-none">
         <Reveal>
-          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-panel2/80 backdrop-blur border border-line-light text-xs font-mono tracking-widest text-silver mb-5 shadow-glowSm">
-            <span className="w-2 h-2 rounded-full bg-blue animate-pulse" />
-            <span>JEBARAJ ALEX ROBIN PHOTOGRAPHY · KALLIDAIKURICHI</span>
+          <div className="flex flex-wrap items-center gap-3 mb-5 pointer-events-auto">
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-panel2/80 backdrop-blur border border-line-light text-xs font-mono tracking-widest text-silver shadow-glowSm">
+              <span className="w-2 h-2 rounded-full bg-blue animate-pulse" />
+              <span>JEBARAJ ALEX ROBIN PHOTOGRAPHY · KALLIDAIKURICHI</span>
+            </div>
+
+            {/* Active Project Title Pill */}
+            {activeProject && (
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-panel/70 backdrop-blur border border-white/10 text-xs font-mono text-muted transition-all duration-300">
+                <span className="text-blue-glow font-semibold">SERIES {activeIndex + 1}/7:</span>
+                <span className="text-white font-medium truncate max-w-[200px] sm:max-w-xs">{activeProject.title}</span>
+              </div>
+            )}
           </div>
 
-          <span className="block font-script text-3xl sm:text-4xl md:text-5xl text-blue-glow mb-3 -rotate-1 select-none font-medium">
+          <span className="block font-script text-3xl sm:text-4xl md:text-5xl text-blue-glow mb-3 -rotate-1 select-none font-medium pointer-events-auto">
             Candid. Cinematic. Timeless.
           </span>
 
-          <h1 className="heading-xl text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight max-w-5xl leading-[1.02]">
+          <h1 className="heading-xl text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight max-w-5xl leading-[1.02] pointer-events-auto">
             Your Moments.
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-silver to-blue-glow">
@@ -51,7 +90,7 @@ export default function HeroSection() {
             </span>
           </h1>
 
-          <div className="mt-9 flex flex-wrap items-center gap-4">
+          <div className="mt-9 flex flex-wrap items-center gap-4 pointer-events-auto">
             <Link
               to="/portfolio"
               className="inline-flex items-center gap-2.5 bg-blue text-white text-xs sm:text-sm font-semibold tracking-wider uppercase px-7 py-4 rounded shadow-glow hover:bg-blue-accent hover:shadow-glowCyan hover:scale-[1.02] transition-all"
@@ -76,4 +115,3 @@ export default function HeroSection() {
     </section>
   )
 }
-

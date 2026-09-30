@@ -206,8 +206,8 @@ export const projects: Project[] = [
   },
   {
     slug: 'coastal-solitude',
-    title: 'Whispering Horizons: Private Shoot',
-    category: 'Private',
+    title: 'Whispering Horizons: Coastal Study',
+    category: 'Portraits',
     location: 'Tranquebar & Pondicherry Coast',
     date: 'September 2025',
     client: 'Private Commission',
@@ -229,6 +229,27 @@ export const projects: Project[] = [
         aspect: 'portrait',
         caption: 'Unplanned conversations on the sunlit veranda',
         exif: { camera: 'Sony A7 IV', lens: '35mm f/1.4 GM', aperture: 'f/1.8', shutterSpeed: '1/1000s', iso: '160' },
+      },
+    ],
+  },
+  {
+    slug: 'urban-geometry',
+    title: 'Urban Geometry: Architectural Visions',
+    category: 'Commercial',
+    location: 'Kallidaikurichi & Chennai',
+    date: 'August 2025',
+    client: 'Modern Living Magazine',
+    deliverables: 'Architectural Feature, 15 High-Res Plates',
+    coverImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop',
+    intro:
+      'Clean lines, glass reflections, and dramatic shadows intersecting at midday. A study of contemporary spaces in Southern India.',
+    gallery: [
+      {
+        src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop',
+        alt: 'Towering glass facade reflecting azure sky',
+        aspect: 'portrait',
+        caption: 'Reflective minimalism in modern concrete structures',
+        exif: { camera: 'Sony A7R V', lens: '16-35mm f/2.8 GM', aperture: 'f/8.0', shutterSpeed: '1/250s', iso: '100' },
       },
     ],
   },

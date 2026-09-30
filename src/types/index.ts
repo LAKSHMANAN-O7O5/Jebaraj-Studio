@@ -3,7 +3,6 @@ export type PhotographyCategory =
   | 'Sports'
   | 'Events'
   | 'Portraits'
-  | 'Private'
   | 'Commercial'
 
 export interface CameraExif {
@@ -79,14 +78,6 @@ export interface PackageItem {
   period?: string
   isPopular?: boolean
   deliverables: string[]
-}
-
-export interface GearItem {
-  id: string
-  name: string
-  category: 'Body' | 'Lens' | 'Lighting' | 'Support'
-  description: string
-  specs: string
 }
 
 export interface BeforeAfterComparison {

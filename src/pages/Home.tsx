@@ -6,8 +6,6 @@ import FeaturedStories from '../components/sections/FeaturedStories'
 import FloatingGallery from '../components/sections/FloatingGallery'
 import BeforeAfterSection from '../components/sections/BeforeAfterSection'
 import PortfolioGrid from '../components/sections/PortfolioGrid'
-import WhyChooseUs from '../components/sections/WhyChooseUs'
-import CameraGearSection from '../components/sections/CameraGearSection'
 import PricingPackages from '../components/sections/PricingPackages'
 import TestimonialsSection from '../components/sections/TestimonialsSection'
 import InstagramShowcase from '../components/sections/InstagramShowcase'
@@ -38,8 +36,6 @@ export default function Home() {
         </div>
       </section>
 
-      <WhyChooseUs />
-      <CameraGearSection />
       <PricingPackages />
       <TestimonialsSection />
       <InstagramShowcase />

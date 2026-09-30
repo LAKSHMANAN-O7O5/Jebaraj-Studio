@@ -70,23 +70,6 @@ export const services: Service[] = [
     ],
   },
   {
-    slug: 'private-shoots',
-    title: 'Private & Destination Shoots',
-    category: 'Private',
-    description:
-      'Custom travel commissions, intimate family milestones, and anniversary sessions shot at your chosen sanctuary.',
-    fullDescription:
-      'Have an exotic getaway or a deeply meaningful location? We travel with compact, cinema-grade gear to craft an exclusive, personalized photo narrative of your shared journey.',
-    image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1200&auto=format&fit=crop',
-    startingPrice: '₹55,000',
-    features: [
-      'Available across India and international destinations',
-      'Bespoke travel itinerary shooting schedule',
-      'Drone aerial landscape integration',
-      'Private encrypted gallery delivery',
-    ],
-  },
-  {
     slug: 'commercial',
     title: 'Commercial & Brand Campaigns',
     category: 'Commercial',

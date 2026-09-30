@@ -1,11 +1,7 @@
 import Layout from '../components/layout/Layout'
 import Reveal from '../components/common/Reveal'
-import SectionHeader from '../components/common/SectionHeader'
-import CameraGearSection from '../components/sections/CameraGearSection'
-import WhyChooseUs from '../components/sections/WhyChooseUs'
 import TestimonialsSection from '../components/sections/TestimonialsSection'
 import BookingSection from '../components/sections/BookingSection'
-import { siteConfig } from '../config/siteConfig'
 
 export default function AboutPage() {
   return (
@@ -77,8 +73,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <WhyChooseUs />
-      <CameraGearSection />
       <TestimonialsSection />
       <BookingSection />
     </Layout>

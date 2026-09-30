@@ -11,7 +11,6 @@ const filters: Array<PhotographyCategory | 'All'> = [
   'Sports',
   'Events',
   'Portraits',
-  'Private',
   'Commercial',
 ]
 
