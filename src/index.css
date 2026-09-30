@@ -1,0 +1,238 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #050608;
+  color: #FFFFFF;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+
+/* Accessibility focus styles */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #38BDF8;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Fade-up on scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.container-x {
+  width: 100%;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-x {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+.eyebrow {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #38BDF8;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 2px;
+  background-color: #2563EB;
+}
+
+.heading-xl {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+}
+
+/* Glassmorphism panel */
+.glass-panel {
+  background: rgba(13, 15, 21, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(20, 23, 34, 0.6) 0%, rgba(13, 15, 21, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.glass-card:hover {
+  border-color: rgba(37, 99, 235, 0.45);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #050608;
+}
+::-webkit-scrollbar-thumb {
+  background: #222738;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2563EB;
+}
+
+/* Camera viewfinder frame corners */
+.vf-corner-tl {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid rgba(56, 189, 248, 0.6);
+  border-left: 2px solid rgba(56, 189, 248, 0.6);
+  pointer-events: none;
+}
+.vf-corner-tr {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid rgba(56, 189, 248, 0.6);
+  border-right: 2px solid rgba(56, 189, 248, 0.6);
+  pointer-events: none;
+}
+.vf-corner-bl {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  width: 14px;
+  height: 14px;
+  border-bottom: 2px solid rgba(56, 189, 248, 0.6);
+  border-left: 2px solid rgba(56, 189, 248, 0.6);
+  pointer-events: none;
+}
+.vf-corner-br {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 14px;
+  height: 14px;
+  border-bottom: 2px solid rgba(56, 189, 248, 0.6);
+  border-right: 2px solid rgba(56, 189, 248, 0.6);
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────
+   Floating Gallery
+   ───────────────────────────────────────────────────────── */
+
+.floating-scene-wrapper {
+  overflow: visible;
+}
+
+/* Mobile: simplify to stacked layout, disable 3D */
+@media (max-width: 767px) {
+  .floating-scene-wrapper {
+    perspective: none !important;
+    height: auto !important;
+    position: relative !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0 1rem 2rem;
+    justify-content: center;
+  }
+
+  .floating-card {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 85vw !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  /* Show only 4 cards on mobile */
+  .floating-card:nth-child(n + 5) {
+    display: none;
+  }
+}
+
+/* Tablet: reduce card sizes and movement */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .floating-card {
+    max-width: 32vw !important;
+  }
+  /* Show only 6 cards on tablet */
+  .floating-card:nth-child(n + 7) {
+    display: none;
+  }
+}
+
+/* Reduced motion: disable floating */
+@media (prefers-reduced-motion: reduce) {
+  .floating-card {
+    will-change: auto !important;
+    transition: none !important;
+  }
+}
