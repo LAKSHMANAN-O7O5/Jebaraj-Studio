@@ -12,12 +12,16 @@ interface FloatingPhoto {
   caption?: string
   category: string
   index: number
-  // 3D spatial layout (percentages)
+  // Desktop spatial layout
   x: number       // left %
   y: number       // top %
   z: number       // translateZ px
   rotate: number  // slight rotation deg
   width: number   // card width px
+  // Mobile / Tablet spatial layout
+  mx: number      // left %
+  my: number      // top %
+  mw: number      // width %
   galleryImage: GalleryImage
 }
 
@@ -25,28 +29,27 @@ interface FloatingPhoto {
 function buildFloatingPhotos(): FloatingPhoto[] {
   const allImages: FloatingPhoto[] = []
 
-  // Curated layout positions — each photo gets a deliberate X/Y/Z/rotation
-  // to create a balanced, non-overlapping cinematic arrangement
-  const layouts: Array<{ x: number; y: number; z: number; rotate: number; width: number }> = [
-    // Row 1 — top area (below header, starts at ~15%)
-    { x: 2,  y: 12,  z: 50,   rotate: -2,    width: 300 },
-    { x: 38, y: 8,   z: -40,  rotate: 1.5,   width: 260 },
-    { x: 68, y: 14,  z: 30,   rotate: -1.3,  width: 290 },
+  // Curated layout positions — exact desktop values preserved, + mobile percentage scaling
+  const layouts: Array<{ x: number; y: number; z: number; rotate: number; width: number; mx: number; my: number; mw: number }> = [
+    // Row 1 — top area
+    { x: 2,  y: 12,  z: 50,   rotate: -2,    width: 300, mx: 2,  my: 3,  mw: 33 },
+    { x: 38, y: 8,   z: -40,  rotate: 1.5,   width: 260, mx: 34, my: 1,  mw: 30 },
+    { x: 68, y: 14,  z: 30,   rotate: -1.3,  width: 290, mx: 64, my: 5,  mw: 32 },
 
     // Row 2 — mid area
-    { x: 15, y: 38,  z: -25,  rotate: 2,     width: 320 },
-    { x: 52, y: 35,  z: 55,   rotate: -2.5,  width: 280 },
-    { x: 78, y: 42,  z: -50,  rotate: 1.8,   width: 250 },
+    { x: 15, y: 38,  z: -25,  rotate: 2,     width: 320, mx: 10, my: 26, mw: 34 },
+    { x: 52, y: 35,  z: 55,   rotate: -2.5,  width: 280, mx: 42, my: 24, mw: 32 },
+    { x: 78, y: 42,  z: -50,  rotate: 1.8,   width: 250, mx: 66, my: 28, mw: 30 },
 
     // Row 3 — lower area
-    { x: 4,  y: 62,  z: 35,   rotate: -1.5,  width: 270 },
-    { x: 35, y: 65,  z: -30,  rotate: 2.2,   width: 310 },
-    { x: 62, y: 60,  z: 45,   rotate: -2.8,  width: 260 },
+    { x: 4,  y: 62,  z: 35,   rotate: -1.5,  width: 270, mx: 3,  my: 48, mw: 32 },
+    { x: 35, y: 65,  z: -30,  rotate: 2.2,   width: 310, mx: 33, my: 50, mw: 34 },
+    { x: 62, y: 60,  z: 45,   rotate: -2.8,  width: 260, mx: 63, my: 46, mw: 32 },
 
     // Row 4 — bottom scattered
-    { x: 22, y: 82,  z: -55,  rotate: 1.2,   width: 240 },
-    { x: 50, y: 85,  z: 20,   rotate: -1,    width: 280 },
-    { x: 80, y: 78,  z: -35,  rotate: 2.5,   width: 250 },
+    { x: 22, y: 82,  z: -55,  rotate: 1.2,   width: 240, mx: 15, my: 70, mw: 30 },
+    { x: 50, y: 85,  z: 20,   rotate: -1,    width: 280, mx: 40, my: 72, mw: 32 },
+    { x: 80, y: 78,  z: -35,  rotate: 2.5,   width: 250, mx: 65, my: 68, mw: 31 },
   ]
 
   projects.forEach((project) => {
@@ -74,6 +77,17 @@ function buildFloatingPhotos(): FloatingPhoto[] {
 export default function FloatingGallery() {
   const sectionRef = useRef<HTMLElement>(null)
   const sceneRef = useRef<HTMLDivElement>(null)
+
+  // Track window width for responsive layout mode
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  )
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // Mouse + scroll state (mutable refs for animation loop — no re-renders)
   const mouseRef = useRef({ x: 0, y: 0 })
@@ -107,17 +121,23 @@ export default function FloatingGallery() {
     return () => mql.removeEventListener('change', handler)
   }, [])
 
-  /* ── Mouse movement tracking ── */
+  /* ── Mouse & Touch movement tracking ── */
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const handlePointerMove = (e: MouseEvent | TouchEvent) => {
       if (!sectionRef.current) return
       const rect = sectionRef.current.getBoundingClientRect()
+      const clientX = 'touches' in e ? e.touches[0]?.clientX ?? 0 : e.clientX
+      const clientY = 'touches' in e ? e.touches[0]?.clientY ?? 0 : e.clientY
       // Normalised -1 to 1
-      mouseRef.current.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
-      mouseRef.current.y = ((e.clientY - rect.top) / rect.height) * 2 - 1
+      mouseRef.current.x = ((clientX - rect.left) / rect.width) * 2 - 1
+      mouseRef.current.y = ((clientY - rect.top) / rect.height) * 2 - 1
     }
-    window.addEventListener('mousemove', handleMouseMove, { passive: true })
-    return () => window.removeEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mousemove', handlePointerMove, { passive: true })
+    window.addEventListener('touchmove', handlePointerMove, { passive: true })
+    return () => {
+      window.removeEventListener('mousemove', handlePointerMove)
+      window.removeEventListener('touchmove', handlePointerMove)
+    }
   }, [])
 
   /* ── Scroll tracking ── */
@@ -161,6 +181,8 @@ export default function FloatingGallery() {
       const my = smoothMouse.current.y
       const sp = smoothScroll.current
       const time = performance.now() * 0.001
+      const isDesktop = window.innerWidth >= 1024
+      const zScale = isDesktop ? 1 : 0.35
 
       cards.forEach((card) => {
         const depth = parseFloat(card.dataset.depth || '0')
@@ -169,29 +191,29 @@ export default function FloatingGallery() {
         const isHovered = card.dataset.hovered === 'true'
 
         // Depth-based parallax — cards with larger |z| move more
-        const depthFactor = depth / 100
-        const parallaxX = mx * depthFactor * 25
-        const parallaxY = my * depthFactor * 18
+        const depthFactor = (depth * zScale) / 100
+        const parallaxX = mx * depthFactor * (isDesktop ? 25 : 10)
+        const parallaxY = my * depthFactor * (isDesktop ? 18 : 8)
 
         // Gentle organic floating
-        const floatY = Math.sin(time * 0.4 + floatOffset) * 8
-        const floatX = Math.cos(time * 0.3 + floatOffset * 1.5) * 4
+        const floatY = Math.sin(time * 0.4 + floatOffset) * (isDesktop ? 8 : 3)
+        const floatX = Math.cos(time * 0.3 + floatOffset * 1.5) * (isDesktop ? 4 : 2)
 
         // Scroll influence — shift entire field upward
-        const scrollShift = sp * 60
+        const scrollShift = sp * (isDesktop ? 60 : 25)
 
         // Subtle rotation from mouse
         const rotateY = mx * depthFactor * 4
         const rotateX = -my * depthFactor * 3
 
         // If hovered, reduce movement and bring forward
-        const hoverZ = isHovered ? 80 : 0
+        const hoverZ = isHovered ? (isDesktop ? 80 : 25) : 0
         const moveDampen = isHovered ? 0.15 : 1
         const hoverScale = isHovered ? 1.08 : 1
 
         const tx = (parallaxX + floatX) * moveDampen
         const ty = (parallaxY + floatY - scrollShift) * moveDampen
-        const tz = depth + hoverZ
+        const tz = depth * zScale + hoverZ
 
         card.style.transform = `
           translate3d(${tx}px, ${ty}px, ${tz}px)
@@ -228,13 +250,14 @@ export default function FloatingGallery() {
     [openLightbox],
   )
 
+  const isDesktop = windowWidth >= 1024
+
   return (
     <>
       <section
         ref={sectionRef}
         id="floating-gallery"
         className="relative w-full overflow-hidden bg-ink border-t border-line"
-        style={{ minHeight: '100vh' }}
         aria-label="Floating Photography Gallery — Visual Stories by Jebaraj Studio"
       >
         {/* Background glow */}
@@ -264,9 +287,11 @@ export default function FloatingGallery() {
 
         {/* ── 3D Floating Scene ── */}
         <div
-          className="relative z-10 w-full floating-scene-wrapper"
+          className="relative z-10 w-full floating-scene-wrapper overflow-hidden px-2 sm:px-4"
           style={{
-            height: 'clamp(600px, 75vh, 1000px)',
+            height: isDesktop
+              ? 'clamp(600px, 75vh, 1000px)'
+              : 'clamp(480px, 125vw, 680px)',
             perspective: '1200px',
             perspectiveOrigin: '50% 50%',
           }}
@@ -289,10 +314,10 @@ export default function FloatingGallery() {
                 data-hovered={hoveredIndex === idx ? 'true' : 'false'}
                 data-static-transform={`translate3d(0px, 0px, ${photo.z}px) rotateY(${photo.rotate}deg)`}
                 style={{
-                  left: `${photo.x}%`,
-                  top: `${photo.y}%`,
-                  width: `${photo.width}px`,
-                  maxWidth: '42vw',
+                  left: isDesktop ? `${photo.x}%` : `${photo.mx}%`,
+                  top: isDesktop ? `${photo.y}%` : `${photo.my}%`,
+                  width: isDesktop ? `${photo.width}px` : `${photo.mw}%`,
+                  maxWidth: isDesktop ? '42vw' : '36vw',
                   transformStyle: 'preserve-3d',
                   willChange: 'transform',
                   transition: hoveredIndex === idx
