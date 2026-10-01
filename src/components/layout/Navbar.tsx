@@ -19,6 +19,13 @@ export default function Navbar() {
     setOpen(false)
   }, [location.pathname])
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetPath: string) => {
+    if (location.pathname === targetPath) {
+      e.preventDefault()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -31,6 +38,7 @@ export default function Navbar() {
         {/* Brand Logo */}
         <Link
           to="/"
+          onClick={(e) => handleNavClick(e, '/')}
           className="flex items-center gap-3 group focus-visible:outline-none"
           aria-label="Jebaraj Alex Robin Photography home"
         >
@@ -59,6 +67,8 @@ export default function Navbar() {
             <li key={l.to}>
               <NavLink
                 to={l.to}
+                end={l.to === '/'}
+                onClick={(e) => handleNavClick(e, l.to)}
                 className={({ isActive }) =>
                   `relative text-sm font-medium tracking-wider uppercase py-1 transition-all ${
                     isActive
@@ -94,6 +104,7 @@ export default function Navbar() {
 
           <Link
             to="/contact"
+            onClick={(e) => handleNavClick(e, '/contact')}
             className="inline-flex items-center gap-2 bg-blue text-white text-xs font-semibold tracking-widest uppercase px-5 py-2.5 rounded shadow-glowSm hover:bg-blue-accent hover:shadow-glow transition-all"
           >
             Book Shoot <span aria-hidden>→</span>
@@ -137,7 +148,11 @@ export default function Navbar() {
                 <li key={l.to}>
                   <NavLink
                     to={l.to}
-                    onClick={() => setOpen(false)}
+                    end={l.to === '/'}
+                    onClick={(e) => {
+                      setOpen(false)
+                      handleNavClick(e, l.to)
+                    }}
                     className={({ isActive }) =>
                       `flex items-center justify-between py-2 text-base font-display font-medium tracking-wide transition-colors ${
                         isActive
@@ -164,7 +179,10 @@ export default function Navbar() {
               </a>
               <Link
                 to="/contact"
-                onClick={() => setOpen(false)}
+                onClick={(e) => {
+                  setOpen(false)
+                  handleNavClick(e, '/contact')
+                }}
                 className="flex items-center justify-center gap-2 py-3 rounded bg-blue text-xs font-semibold uppercase tracking-wider text-white shadow-glowSm"
               >
                 Book Shoot
@@ -176,4 +194,5 @@ export default function Navbar() {
     </header>
   )
 }
+
 

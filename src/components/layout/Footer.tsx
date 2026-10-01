@@ -1,8 +1,17 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { siteConfig } from '../../config/siteConfig'
 import { services } from '../../data/services'
 
 export default function Footer() {
+  const location = useLocation()
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetPath: string) => {
+    if (location.pathname === targetPath) {
+      e.preventDefault()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
   return (
     <footer className="bg-ink border-t border-line pt-20 pb-10 relative overflow-hidden">
       {/* Background subtle radial glow */}
@@ -11,7 +20,11 @@ export default function Footer() {
       <div className="container-x relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
         {/* Brand Column */}
         <div className="lg:col-span-2">
-          <Link to="/" className="inline-flex items-center gap-3 mb-5 group">
+          <Link
+            to="/"
+            onClick={(e) => handleNavClick(e, '/')}
+            className="inline-flex items-center gap-3 mb-5 group"
+          >
             <div className="w-10 h-10 rounded-lg overflow-hidden bg-panel2 border border-line flex items-center justify-center group-hover:border-blue transition-colors">
               <img
                 src="/logo.png"
@@ -50,6 +63,7 @@ export default function Footer() {
               <li key={l.to}>
                 <Link
                   to={l.to}
+                  onClick={(e) => handleNavClick(e, l.to)}
                   className="text-fog hover:text-white hover:translate-x-1 inline-block transition-all"
                 >
                   {l.label}
