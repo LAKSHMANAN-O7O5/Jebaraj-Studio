@@ -53,6 +53,8 @@ export default function HeroSection() {
   const touchStartY = useRef(0)
   const touchStartX = useRef(0)
 
+  const lastWheelTimeRef = useRef<number>(0)
+
   // Preload adjacent images
   useEffect(() => {
     const preload = (index: number) => {
@@ -108,8 +110,6 @@ export default function HeroSection() {
     clearAutoPlay()
     autoPlayTimerRef.current = setTimeout(() => {
       goToNext()
-      // After the transition completes, start the next autoplay cycle
-      // We schedule the next startAutoPlay after the transition finishes
       setTimeout(() => {
         startAutoPlay()
       }, TRANSITION_DURATION + 50)
@@ -144,23 +144,26 @@ export default function HeroSection() {
       // Ignore micro-deltas / trackpad noise
       if (Math.abs(e.deltaY) < 15) return
 
-      // Don't block during transition
-      if (isTransitioningRef.current) return
+      // Don't block during transition or within 700ms of last wheel action
+      const now = Date.now()
+      if (isTransitioningRef.current || now - lastWheelTimeRef.current < 700) return
 
       if (e.deltaY > 0) {
+        lastWheelTimeRef.current = now
+        clearAutoPlay()
         goToNext()
-        // Reset autoplay after manual scroll
         setTimeout(() => startAutoPlay(), TRANSITION_DURATION + 50)
       } else if (e.deltaY < 0) {
+        lastWheelTimeRef.current = now
+        clearAutoPlay()
         goToPrev()
-        // Reset autoplay after manual scroll
         setTimeout(() => startAutoPlay(), TRANSITION_DURATION + 50)
       }
     }
 
     window.addEventListener('wheel', handleWheel, { passive: true })
     return () => window.removeEventListener('wheel', handleWheel)
-  }, [goToNext, goToPrev, startAutoPlay])
+  }, [goToNext, goToPrev, startAutoPlay, clearAutoPlay])
 
   // --- Touch Swipe for Mobile ---
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -177,11 +180,25 @@ export default function HeroSection() {
 
     let triggered = false
     if (Math.abs(deltaY) > Math.abs(deltaX)) {
-      if (deltaY < -50) { goToNext(); triggered = true }
-      else if (deltaY > 50) { goToPrev(); triggered = true }
+      if (deltaY < -50) {
+        clearAutoPlay()
+        goToNext()
+        triggered = true
+      } else if (deltaY > 50) {
+        clearAutoPlay()
+        goToPrev()
+        triggered = true
+      }
     } else {
-      if (deltaX < -50) { goToNext(); triggered = true }
-      else if (deltaX > 50) { goToPrev(); triggered = true }
+      if (deltaX < -50) {
+        clearAutoPlay()
+        goToNext()
+        triggered = true
+      } else if (deltaX > 50) {
+        clearAutoPlay()
+        goToPrev()
+        triggered = true
+      }
     }
     // Reset autoplay after touch swipe
     if (triggered) {
@@ -191,7 +208,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className="hero relative w-full min-h-screen pt-28 pb-12 px-4 flex flex-col items-center justify-between bg-[#05070B] overflow-hidden text-center select-none z-10"
+      className="hero relative w-full min-h-screen pt-28 pb-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-between bg-[#05070B] overflow-hidden text-center select-none z-10"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -243,7 +260,7 @@ export default function HeroSection() {
       </div>
 
       {/* 2. HERO PHOTO STAGE */}
-      <div className="hero-photo-stage relative z-10 w-[90vw] md:w-[62vw] max-w-[900px] aspect-[16/9] mx-auto my-3 md:my-5 flex items-center justify-center perspective-[1000px]">
+      <div className="hero-photo-stage relative z-10 w-full max-w-6xl lg:max-w-7xl aspect-[16/9] mx-auto my-3 md:my-5 flex items-center justify-center perspective-[1000px]">
         {/* Exiting Photo during transition */}
         {isTransitioning && prevIndex !== null && (
           <div
@@ -264,7 +281,7 @@ export default function HeroSection() {
             <img
               src={heroImages[prevIndex].src}
               alt={heroImages[prevIndex].title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
           </div>
@@ -287,7 +304,7 @@ export default function HeroSection() {
           <img
             src={heroImages[activeIndex].src}
             alt={heroImages[activeIndex].title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-center"
             loading="eager"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />

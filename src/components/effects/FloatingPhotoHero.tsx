@@ -121,6 +121,8 @@ export default function FloatingPhotoHero({ progress }: { progress: number }) {
     return () => document.removeEventListener('visibilitychange', handleVisibility);
   }, [startAutoPlay, clearAutoPlay]);
 
+  const lastWheelTimeRef = useRef<number>(0);
+
   // --- Wheel handler: manual control that resets autoplay ---
   useEffect(() => {
     if (isMobile) return;
@@ -128,12 +130,18 @@ export default function FloatingPhotoHero({ progress }: { progress: number }) {
     const handleWheel = (e: WheelEvent) => {
       if (window.scrollY > 20) return;
       if (Math.abs(e.deltaY) < 15) return;
-      if (isTransitioningRef.current) return;
+
+      const now = Date.now();
+      if (isTransitioningRef.current || now - lastWheelTimeRef.current < 700) return;
 
       if (e.deltaY > 0) {
+        lastWheelTimeRef.current = now;
+        clearAutoPlay();
         goToNext();
         setTimeout(() => startAutoPlay(), TRANSITION_DURATION + 50);
       } else if (e.deltaY < 0) {
+        lastWheelTimeRef.current = now;
+        clearAutoPlay();
         goToPrev();
         setTimeout(() => startAutoPlay(), TRANSITION_DURATION + 50);
       }
@@ -141,7 +149,7 @@ export default function FloatingPhotoHero({ progress }: { progress: number }) {
 
     window.addEventListener('wheel', handleWheel, { passive: true });
     return () => window.removeEventListener('wheel', handleWheel);
-  }, [isMobile, goToNext, goToPrev, startAutoPlay]);
+  }, [isMobile, goToNext, goToPrev, startAutoPlay, clearAutoPlay]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY;
@@ -157,11 +165,11 @@ export default function FloatingPhotoHero({ progress }: { progress: number }) {
 
     let triggered = false;
     if (Math.abs(deltaY) > Math.abs(deltaX)) {
-      if (deltaY < -50) { goToNext(); triggered = true; } // Swipe up -> next
-      else if (deltaY > 50) { goToPrev(); triggered = true; } // Swipe down -> prev
+      if (deltaY < -50) { clearAutoPlay(); goToNext(); triggered = true; } // Swipe up -> next
+      else if (deltaY > 50) { clearAutoPlay(); goToPrev(); triggered = true; } // Swipe down -> prev
     } else {
-      if (deltaX < -50) { goToNext(); triggered = true; } // Swipe left -> next
-      else if (deltaX > 50) { goToPrev(); triggered = true; } // Swipe right -> prev
+      if (deltaX < -50) { clearAutoPlay(); goToNext(); triggered = true; } // Swipe left -> next
+      else if (deltaX > 50) { clearAutoPlay(); goToPrev(); triggered = true; } // Swipe right -> prev
     }
     if (triggered) {
       setTimeout(() => startAutoPlay(), TRANSITION_DURATION + 50);
@@ -246,7 +254,7 @@ export default function FloatingPhotoHero({ progress }: { progress: number }) {
         </div>
 
         {/* Single Photo Gallery Area */}
-        <div className="relative w-[90vw] md:w-[65vw] h-[35vh] md:h-[48vh] flex items-center justify-center perspective-[1200px] pointer-events-none">
+        <div className="relative w-full max-w-6xl lg:max-w-7xl aspect-[16/9] flex items-center justify-center perspective-[1200px] pointer-events-none px-4 sm:px-6">
           {heroImages.map((item, i) => (
             <div
               key={i}
@@ -260,7 +268,7 @@ export default function FloatingPhotoHero({ progress }: { progress: number }) {
               <img
                 src={item.src}
                 alt={item.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-center"
                 loading={i === 0 ? 'eager' : 'lazy'}
               />
               <div 

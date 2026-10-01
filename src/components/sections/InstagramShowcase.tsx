@@ -2,30 +2,44 @@ import { siteConfig } from '../../config/siteConfig'
 import Reveal from '../common/Reveal'
 import SectionHeader from '../common/SectionHeader'
 
+import firstImg from '../../assets/instagram images/first img.jpg'
+import secondImg from '../../assets/instagram images/second img.jpg'
+import thirdImg from '../../assets/instagram images/third img.jpg'
+import fourthImg from '../../assets/instagram images/fourth img.jpg'
+import fifthImg from '../../assets/instagram images/fifth img.jpg'
+import sixthImg from '../../assets/instagram images/sixth img.jpg'
+
 const instagramPosts = [
   {
-    src: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600&auto=format&fit=crop',
-    alt: 'Bridal floral canopy candid shot',
+    src: firstImg,
+    alt: 'First Instagram post',
+    url: 'https://www.instagram.com/p/DdJawHgFKx2/?img_index=7&stkn=MXMxcDJtdzdndm9obA%3D%3D',
   },
   {
-    src: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=600&auto=format&fit=crop',
-    alt: 'Football match winning moment',
+    src: secondImg,
+    alt: 'Second Instagram post',
+    objectPosition: 'center top',
+    url: 'https://www.instagram.com/p/DRSIVsyESH9/?stkn=MTA3d2loaW0ya3Roaw%3D%3D',
   },
   {
-    src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=600&auto=format&fit=crop',
-    alt: 'Concert lasers and audience energy',
+    src: thirdImg,
+    alt: 'Third Instagram post',
+    url: 'https://www.instagram.com/p/DdJawHgFKx2/?img_index=3&stkn=MXMxcDJtdzdndm9obA%3D%3D',
   },
   {
-    src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop',
-    alt: 'Natural sunlight portrait study',
+    src: fourthImg,
+    alt: 'Fourth Instagram post',
+    url: 'https://www.instagram.com/p/DcQ1atRFEhP/?img_index=14&stkn=MWx6dW83anZhODNxbg%3D%3D',
   },
   {
-    src: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=600&auto=format&fit=crop',
-    alt: 'Silk saree couture fashion campaign',
+    src: fifthImg,
+    alt: 'Fifth Instagram post',
+    url: 'https://www.instagram.com/p/DcOQtlaEVVg/?img_index=10&stkn=https%3A%2F%2Fwww.instagram.com%2Fp%2FDRSIVsyESH9%2F%3Fstkn%3DMTA3d2loaW0ya3Roaw%3D%3DMmo3NDhpNmwzb3N5',
   },
   {
-    src: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600&auto=format&fit=crop',
-    alt: 'East Coast seaside golden hour reflection',
+    src: sixthImg,
+    alt: 'Sixth Instagram post',
+    url: 'https://www.instagram.com/p/DRE-ndOETRa/?stkn=MWRzOTBiNGI3bDUyYw%3D%3D',
   },
 ]
 
@@ -44,16 +58,17 @@ export default function InstagramShowcase() {
           {instagramPosts.map((post, i) => (
             <Reveal key={post.src} delay={i * 40}>
               <a
-                href={siteConfig.socials.instagram}
+                href={post.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative block aspect-square rounded overflow-hidden bg-ink border border-line-light shadow-card"
+                className="group relative block aspect-[16/9] rounded overflow-hidden bg-ink border border-line-light shadow-card cursor-pointer"
                 aria-label={`View Instagram post: ${post.alt}`}
               >
                 <img
                   src={post.src}
                   alt={post.alt}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  style={{ objectPosition: post.objectPosition || 'center' }}
                   loading="lazy"
                 />
 
@@ -75,4 +90,5 @@ export default function InstagramShowcase() {
     </section>
   )
 }
+
 
