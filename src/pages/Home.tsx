@@ -1,7 +1,6 @@
 import Layout from '../components/layout/Layout'
 import HeroSection from '../components/sections/HeroSection'
 import AboutPreview from '../components/sections/AboutPreview'
-import ServicesGrid from '../components/sections/ServicesGrid'
 import FeaturedStories from '../components/sections/FeaturedStories'
 import FloatingGallery from '../components/sections/FloatingGallery'
 import BeforeAfterSection from '../components/sections/BeforeAfterSection'
@@ -18,7 +17,6 @@ export default function Home() {
     <Layout>
       <HeroSection />
       <AboutPreview />
-      <ServicesGrid />
       <FeaturedStories />
       <FloatingGallery />
       <BeforeAfterSection />

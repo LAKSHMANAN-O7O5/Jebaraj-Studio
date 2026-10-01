@@ -1,5 +1,4 @@
 import Layout from '../components/layout/Layout'
-import ServicesGrid from '../components/sections/ServicesGrid'
 import PricingPackages from '../components/sections/PricingPackages'
 import BookingSection from '../components/sections/BookingSection'
 import Reveal from '../components/common/Reveal'
@@ -19,7 +18,6 @@ export default function ServicesPage() {
         </Reveal>
       </section>
 
-      <ServicesGrid />
       <PricingPackages />
       <BookingSection />
     </Layout>
